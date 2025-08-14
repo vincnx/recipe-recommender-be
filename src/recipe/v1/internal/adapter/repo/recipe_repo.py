@@ -5,13 +5,28 @@ from nltk.tokenize import word_tokenize
 import os
 import pickle
 from ...biz.model.recipe_model import TypeRecipe
+import json
+from pymongo import MongoClient, InsertOne
+from bson import ObjectId
 
 class RecipeRepo():
-    def __init__(self):        
+    def __init__(self, mongo_config):
         self.w2v_model = None
         self.all_recipes_vector = None
         self.df_clean = None
+        self.mongo = None
         self._load_model()
+        self._load_mongo(mongo_config)
+
+    def find_recipes(self, recipe_ids: list[ObjectId]) -> list[TypeRecipe]:
+        collection = self.db.recipes
+        query = {"_id": {
+            "$in": recipe_ids
+        }} if recipe_ids else {}
+
+        results = list(collection.find(query))
+
+        return results
     
     def get_recommendations(self, user_input, num_recommendations=5) -> list[TypeRecipe]:
         """Get recipe recommendations based on user input"""
@@ -62,3 +77,22 @@ class RecipeRepo():
             self.df_clean = pickle.load(f)
             
         return self
+    
+    def _load_mongo(self, mongo_config):
+        client = MongoClient(mongo_config['uri'])
+        self.db = client[mongo_config['db_name']]
+
+    def seed_data(self):
+        req = []
+        collection = self.db.recipes
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(current_dir, "../../../../../.."))
+        data_file_path = os.path.join(project_root, "data", "cleaned_data.json")
+        with open(data_file_path) as f:
+            for jsonObj in f:
+                myDict = json.loads(jsonObj)
+                req.append(InsertOne(myDict))
+
+        res = collection.bulk_write(req)
+        return "success"
