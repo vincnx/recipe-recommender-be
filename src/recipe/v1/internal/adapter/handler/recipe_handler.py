@@ -20,8 +20,8 @@ def list_recipes():
     
     return jsonify(data), 200
 
-@recipe_blueprint.route('', methods=['POST'])
-def get_recipes():
+@recipe_blueprint.route('recommendations', methods=['POST'])
+def get_recommendations():
     recipes = recipe_service.get_recommendations(' '.join(request.json['ingredients']))
     return jsonify(recipes), 200
 

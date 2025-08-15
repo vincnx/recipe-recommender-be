@@ -55,6 +55,7 @@ class RecipeRepo():
         recommendations = []
         for idx in top_indices:
             recipe = {
+                'id': self.df_clean['id'][idx],
                 'title': self.df_clean['title'][idx],
                 'ingredients': self.df_clean['ingredient_item'][idx],
                 'instructions': self.df_clean['instructions'][idx]
