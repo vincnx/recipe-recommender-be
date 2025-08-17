@@ -1,3 +1,4 @@
-mongo:
-  uri: "mongodburi"
-  db_name: "dbname"
+recipe:
+  mongo:
+    uri: "mongodburi"
+    db_name: "dbname"

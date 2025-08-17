@@ -5,7 +5,7 @@ from .recipe.v1.internal.adapter.repo.recipe_repo import RecipeRepo
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration(yaml_files=["src/recipe/v1/config/config.yml"])
     
-    recipe_repo = providers.Singleton(RecipeRepo, mongo_config=config.mongo)
+    recipe_repo = providers.Singleton(RecipeRepo, mongo_config=config.recipe.mongo)
     
     recipe_service = providers.Factory(
         RecipeService,
