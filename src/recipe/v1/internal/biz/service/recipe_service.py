@@ -8,9 +8,9 @@ class RecipeService():
 
     def list_recipes(self, recipe_ids: list[ObjectId] = None):
         return self.repo.find_recipes(recipe_ids)
+
+    def get_recipe(self, recipe_id: ObjectId) -> TypeRecipe:
+        return self.repo.find_recipe(recipe_id)
     
     def get_recommendations(self, user_input, num_recommendations=9) -> list[TypeRecipe]:
         return self.repo.get_recommendations(user_input, num_recommendations)
-
-    def seed_data(self):
-        return self.repo.seed_data()

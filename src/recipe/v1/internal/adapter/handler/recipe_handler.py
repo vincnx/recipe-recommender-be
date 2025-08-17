@@ -20,6 +20,13 @@ def list_recipes():
     
     return jsonify(data), 200
 
+@recipe_blueprint.route('/<recipe_id>', methods=['GET'])
+def get_recipe(recipe_id: str):
+    data = recipe_service.get_recipe(ObjectId(recipe_id))
+    data['_id'] = str(data['_id'])
+
+    return jsonify(data), 200
+
 @recipe_blueprint.route('recommendations', methods=['POST'])
 def get_recommendations():
     recipes = recipe_service.get_recommendations(' '.join(request.json['ingredients']))

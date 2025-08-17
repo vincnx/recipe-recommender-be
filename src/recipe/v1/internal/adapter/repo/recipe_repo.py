@@ -27,6 +27,12 @@ class RecipeRepo():
         results = list(collection.find(query))
 
         return results
+
+    def find_recipe(self, recipe_id: ObjectId) -> TypeRecipe:
+        collection = self.db.recipes
+        query = {"_id": recipe_id}
+        result = collection.find_one(query)
+        return result
     
     def get_recommendations(self, user_input, num_recommendations=5) -> list[TypeRecipe]:
         """Get recipe recommendations based on user input"""
@@ -82,18 +88,3 @@ class RecipeRepo():
     def _load_mongo(self, mongo_config):
         client = MongoClient(mongo_config['uri'])
         self.db = client[mongo_config['db_name']]
-
-    def seed_data(self):
-        req = []
-        collection = self.db.recipes
-
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        project_root = os.path.abspath(os.path.join(current_dir, "../../../../../.."))
-        data_file_path = os.path.join(project_root, "data", "cleaned_data.json")
-        with open(data_file_path) as f:
-            for jsonObj in f:
-                myDict = json.loads(jsonObj)
-                req.append(InsertOne(myDict))
-
-        res = collection.bulk_write(req)
-        return "success"
