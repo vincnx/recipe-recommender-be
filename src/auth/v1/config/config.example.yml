@@ -1,0 +1,8 @@
+auth:
+  google:
+    client_id: "google client id"
+    client_secret: "google client secret"
+    callback_url: "http://localhost:5173/auth/google/callback"
+  mongo:
+    uri: "mongodburi"
+    db_name: "dbname"
