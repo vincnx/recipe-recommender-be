@@ -1,5 +1,6 @@
 from this import d
 from bson import ObjectId
+from flask import session
 
 from ..model import PaginatedResponse, TypeRecipe
 
@@ -28,3 +29,8 @@ class UserService():
             }
 
         return data, len(collections)
+
+    def update_recipe_collections(self, recipe_ids: list[str]) -> None:
+        user = session.get('user')
+        
+        return self.repo.update_recipe_collections(ObjectId(user['_id']), recipe_ids)

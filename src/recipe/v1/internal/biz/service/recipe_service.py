@@ -1,3 +1,4 @@
+from flask import session
 from  ...adapter.repo.recipe_repo import RecipeRepo
 from ...biz.model.recipe_model import PaginatedResponse, TypeRecipe
 from bson import ObjectId
@@ -15,5 +16,12 @@ class RecipeService():
     def get_recipe(self, recipe_id: ObjectId) -> TypeRecipe:
         return self.repo.find_recipe(recipe_id)
     
-    def get_recommendations(self, user_input, num_recommendations=9) -> list[TypeRecipe]:
-        return self.repo.get_recommendations(user_input, num_recommendations)
+    def get_recommendations(self, user_input: str, num_recommendations=9) -> list[TypeRecipe]:
+        recommendations = self.repo.get_recommendations(user_input, num_recommendations)
+        print(recommendations[0])
+
+        if session.get('user'):
+            recipe_ids = [str(r["id"]) for r in recommendations] 
+            self.repo.update_recipe_collections(recipe_ids)
+
+        return recommendations

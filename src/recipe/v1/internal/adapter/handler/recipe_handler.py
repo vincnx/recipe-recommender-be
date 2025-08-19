@@ -31,9 +31,3 @@ def get_recipe(recipe_id: str):
 def get_recommendations():
     recipes = recipe_service.get_recommendations(' '.join(request.json['ingredients']))
     return jsonify(recipes), 200
-
-@recipe_blueprint.route('seed', methods=['GET'])
-def seed_data():
-    recipe_service.seed_data()
-    return jsonify({"message": "success"}), 200
-

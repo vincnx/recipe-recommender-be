@@ -20,5 +20,5 @@ class Container(containers.DeclarativeContainer):
     auth_repo = providers.Singleton(AuthRepo, mongo_config=config.auth.mongo)
     auth_service = providers.Factory(AuthService, oauth_config=config.auth.google, auth_repo=auth_repo)
 
-    user_repo = providers.Singleton(UserRepo, mongo_config=config.user.mongo, recipe_service=recipe_service)
+    user_repo = providers.Singleton(UserRepo, mongo_config=config.user.mongo)
     user_service = providers.Factory(UserService, user_repo=user_repo)

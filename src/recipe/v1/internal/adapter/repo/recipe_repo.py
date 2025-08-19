@@ -1,3 +1,4 @@
+from dependency_injector.wiring import Provide, inject
 import numpy as np
 from gensim.models import Word2Vec
 from sklearn.metrics.pairwise import cosine_similarity
@@ -5,9 +6,9 @@ from nltk.tokenize import word_tokenize
 import os
 import pickle
 from ...biz.model.recipe_model import PaginatedResponse, TypeRecipe
-import json
-from pymongo import MongoClient, InsertOne
+from pymongo import MongoClient
 from bson import ObjectId
+# from ......user.v1.internal.biz.service.user_service import UserService
 
 class RecipeRepo():
     def __init__(self, mongo_config):
@@ -95,6 +96,10 @@ class RecipeRepo():
             
         return recommendations
     
+    @inject
+    def update_recipe_collections(self, recipe_ids: list[str], user_service = Provide["user_service"]) -> None:
+        return user_service.update_recipe_collections(recipe_ids)
+
     def _load_model(self, model_dir='models'):
         """Load a trained model from files"""
         # TODO: add error handling if models not present
