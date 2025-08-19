@@ -1,10 +1,13 @@
 from  ...adapter.repo.recipe_repo import RecipeRepo
-from ...biz.model.recipe_model import TypeRecipe
+from ...biz.model.recipe_model import PaginatedResponse, TypeRecipe
 from bson import ObjectId
 
 class RecipeService():
     def __init__(self, repo: RecipeRepo) -> None:
         self.repo = repo
+
+    def paginate_recipes(self, page=1, limit=10) -> PaginatedResponse[TypeRecipe]:
+        return self.repo.paginate_recipes(page, limit)
 
     def list_recipes(self, recipe_ids: list[ObjectId] = None):
         return self.repo.find_recipes(recipe_ids)

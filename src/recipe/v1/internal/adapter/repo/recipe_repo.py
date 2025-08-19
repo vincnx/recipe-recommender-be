@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.tokenize import word_tokenize
 import os
 import pickle
-from ...biz.model.recipe_model import TypeRecipe
+from ...biz.model.recipe_model import PaginatedResponse, TypeRecipe
 import json
 from pymongo import MongoClient, InsertOne
 from bson import ObjectId
@@ -17,6 +17,31 @@ class RecipeRepo():
         self.mongo = None
         self._load_model()
         self._load_mongo(mongo_config)
+
+    def paginate_recipes(self, page: int, limit: int) -> PaginatedResponse[TypeRecipe]:
+        collection = self.db.recipes
+        
+        # calculate skip
+        skip = (page - 1) * limit
+
+        # query MongoDB
+        cursor = collection.find().skip(skip).limit(limit)
+
+        # convert to list and format _id as string
+        items = []
+        for doc in cursor:
+            doc["_id"] = str(doc["_id"])  # convert ObjectId to string
+            items.append(doc)
+
+        # get total count for pagination metadata
+        total_items = collection.count_documents({})
+        total_pages = (total_items + limit - 1) // limit  # ceiling division
+
+        return {
+            "items": items,
+            "total_items": total_items,
+            "total_pages": total_pages
+        }
 
     def find_recipes(self, recipe_ids: list[ObjectId]) -> list[TypeRecipe]:
         collection = self.db.recipes

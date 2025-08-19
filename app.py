@@ -1,8 +1,10 @@
 from flask import Flask, request
 from src.recipe.v1.internal.adapter.handler import recipe_handler
 from src.auth.v1.internal.adapter.handler import auth_handler
+from src.user.v1.internal.adapter.handler import user_handler
 from src.container import Container
 from flask_cors import CORS
+
 
 def create_app() -> Flask:
     app = Flask(__name__)
@@ -18,10 +20,11 @@ def create_app() -> Flask:
 
     app.register_blueprint(recipe_handler.recipe_blueprint)
     app.register_blueprint(auth_handler.auth_blueprint)
+    app.register_blueprint(user_handler.user_blueprint)
 
     container = Container()
     container.wire(
-        modules=[recipe_handler.__name__, auth_handler.__name__]
+        modules=[recipe_handler.__name__, auth_handler.__name__, user_handler.__name__]
     ) 
 
     return app
