@@ -18,7 +18,6 @@ class RecipeService():
     
     def get_recommendations(self, user_input: str, num_recommendations=9) -> list[TypeRecipe]:
         recommendations = self.repo.get_recommendations(user_input, num_recommendations)
-        print(recommendations[0])
 
         if session.get('user'):
             recipe_ids = [str(r["id"]) for r in recommendations] 

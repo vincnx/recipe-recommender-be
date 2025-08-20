@@ -5,10 +5,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.tokenize import word_tokenize
 import os
 import pickle
-from ...biz.model.recipe_model import PaginatedResponse, TypeRecipe
+
+from ...biz.model import TypeUser, TypeRecipe, PaginatedResponse
 from pymongo import MongoClient
 from bson import ObjectId
-# from ......user.v1.internal.biz.service.user_service import UserService
 
 class RecipeRepo():
     def __init__(self, mongo_config):
@@ -95,7 +95,7 @@ class RecipeRepo():
             recommendations.append(recipe)
             
         return recommendations
-    
+
     @inject
     def update_recipe_collections(self, recipe_ids: list[str], user_service = Provide["user_service"]) -> None:
         return user_service.update_recipe_collections(recipe_ids)

@@ -30,6 +30,22 @@ class UserService():
 
         return data, len(collections)
 
+    def get_recipe_collection(self, user_id: ObjectId, recipe_id: ObjectId) -> TypeRecipe:
+        user = self.repo.find_user_by_id(user_id)
+        collections = user['collections']
+
+        recipe = self.repo.find_recipe(recipe_id)
+
+        if not str(recipe_id) in collections:
+            recipe = {
+                "_id": str(recipe_id),
+                "title": "",
+                "ingredient_item": "",
+                "instructions": "",
+            }
+
+        return recipe
+
     def update_recipe_collections(self, recipe_ids: list[str]) -> None:
         user = session.get('user')
         

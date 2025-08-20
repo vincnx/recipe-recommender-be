@@ -30,6 +30,10 @@ class UserRepo():
         return
     
     @inject
+    def find_recipe(self, recipe_id: ObjectId, recipe_service = Provide['recipe_service']) -> TypeRecipe:
+        return recipe_service.get_recipe(recipe_id)
+
+    @inject
     def paginate_recipes(
         self, 
         page: int, 

@@ -23,3 +23,15 @@ def get_recipe_collections():
     data['num_collection'] = num_collection
 
     return jsonify(data), 200
+
+@user_blueprint.route('collections/<recipe_id>', methods=['GET'])
+def get_recipe_collection(recipe_id: str):
+    user = session.get('user')
+
+    if not user:
+        return jsonify(), 401
+
+    recipe = user_service.get_recipe_collection(ObjectId(user['_id']), ObjectId(recipe_id))
+    recipe['_id'] = str(recipe['_id'])
+
+    return jsonify(recipe), 200
