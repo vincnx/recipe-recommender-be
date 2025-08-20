@@ -3,3 +3,4 @@ __pycache__/
 config.yml
 *.pkl
 *.model
+.venv
