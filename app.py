@@ -12,9 +12,11 @@ def create_app() -> Flask:
     # TODO: move this
     app.secret_key = 'your_secret_key'
     app.config.update(
+        SESSION_PERMANENT=False,
         SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_SAMESITE='None',
         SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_DOMAIN=None
     )
 
     CORS(app, supports_credentials=True)

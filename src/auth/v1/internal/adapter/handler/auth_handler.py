@@ -33,4 +33,6 @@ def get_current_user():
 
 @auth_blueprint.route('logout', methods=['POST'])
 def logout():
-    return jsonify(auth_service.logout()), 200
+    response = jsonify(auth_service.logout())
+    response.set_cookie('session', '', expires=0)
+    return response, 200

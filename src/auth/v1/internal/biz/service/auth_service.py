@@ -36,6 +36,7 @@ class AuthService:
                 'email': id_info['email'],
                 'name': id_info.get('name'),
                 'picture': id_info.get('picture'),
+                'collections': []
             }
             
             user = self.auth_repo.find_user(user_info['email'])
@@ -66,8 +67,7 @@ class AuthService:
         return user
 
     def logout(self):
-        session.pop('user', None)
-        session.pop('access_token', None)
+        session.clear()
         return {'success': True}
 
     def _load_flow(self):
