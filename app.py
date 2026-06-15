@@ -39,8 +39,25 @@ def init_models():
         )
 
 
+def init_config():
+    import os
+    from pathlib import Path
+
+    configs = {
+        "src/recipe/v1/config/config.yml": os.getenv("RECIPE_CONFIG"),
+        "src/auth/v1/config/config.yml": os.getenv("AUTH_CONFIG"),
+        "src/user/v1/config/config.yml": os.getenv("USER_CONFIG"),
+    }
+
+    for path, content in configs.items():
+        if content:
+            Path(path).parent.mkdir(parents=True, exist_ok=True)
+            Path(path).write_text(content)
+
+
 def create_app() -> Flask:
     app = Flask(__name__)
+    init_config()
     init_models()
     nltk.download("punkt_tab")
     # TODO: move this
