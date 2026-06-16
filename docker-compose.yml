@@ -1,0 +1,21 @@
+name: recipe-recommender-be
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: recipe-recommender-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      NLTK_DATA: /app/nltk_data
+      RECIPE_CONFIG: "${RECIPE_CONFIG}"
+      AUTH_CONFIG: "${AUTH_CONFIG}"
+      USER_CONFIG: "${USER_CONFIG}"
+    volumes:
+      - ./models:/app/models:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
